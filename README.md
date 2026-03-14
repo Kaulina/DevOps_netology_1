@@ -4,18 +4,6 @@
 В Yandex Cloud была проведена практическая работа: создана прерываемая виртуальная машина на основе образа Toolbox, а также проверена работа Docker и Terraform.
 Публичный IPv4 130.193.48.217
 
-user@compute-vm-2-2-30-hdd-1773499513214:~$ sudo docker --version
-Docker version 20.10.21, build 20.10.21-0ubuntu1~22.04.3
-user@compute-vm-2-2-30-hdd-1773499513214:~$ terraform --version
-Terraform v1.4.6
-on linux_amd64
-user@compute-vm-2-2-30-hdd-1773499513214:~$ yc --vercion
-ERROR: command name argument expected
-Usage:
-  yc <group|command> [optional flags]
-For detailed information on this command and its flags, run:
-  yc --help
-
 ## Задача 2. 
 
 Для высоконагруженных баз данных MySQL оптимальны физические серверы, поскольку они обеспечивают лучшую производительность дисковой подсистемы и памяти, а также исключают потери ресурсов из-за работы гипервизора и влияние других пользователей в облаке.
