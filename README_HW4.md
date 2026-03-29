@@ -20,7 +20,7 @@ Hey, Netology
 Публикация - docker push irinakau/custom-nginx:1.0.0
 Ссылка на DockerHub - https://hub.docker.com/repository/docker/irinakau/custom-nginx/general
 
-# Задача 2
+## Задача 2
 
 irina@ubuntuVB:~$ date +"%d-%m-%Y %T.%N %Z" ; sleep 0.150 ; docker ps ; ss -tlpn | grep 127.0.0.1:8080 ; docker logs custom-nginx-t2 -n1 ; docker exec -it custom-nginx-t2 base64 /usr/share/nginx/html/index.html
 29-03-2026 13:21:07.208775748 +07
@@ -48,7 +48,7 @@ Hey, Netology
 </body>
 </html>
 
-# Задача 3
+## Задача 3
 
 Контейнер остановился, потому что команда docker attach подключает нас к главному процессу контейнера с PID 1.
 В контейнере nginx запущен в режиме foreground -- это и есть основной процесс.
@@ -73,4 +73,37 @@ Hey, Netology
 irina@ubuntuVB:~$ ss -tlpn | grep 127.0.0.1:8080
 
 Пустой вывод означает, что порт 8080 на хосте больше не принимает подключения, потому что nginx в контейнере изменил порт с 80 на 81. Это объясняет, почему запрос curl к http://127.0.0.1:8080 снаружи не срабатывает.
+
+## Задача 4
+
+контейнер centos запущен:
+irina@ubuntuVB:~/docker-task4$ docker ps
+CONTAINER ID   IMAGE      COMMAND               CREATED         STATUS         PORTS     NAMES
+77ac92f71a6d   centos:8   "tail -f /dev/null"   7 seconds ago   Up 5 seconds             centos-container
+
+Файл file_from_centos.txt создали в контейнере CentOS, и теперь его можно найти в смонтированном каталоге /data:
+[root@77ac92f71a6d /]# echo "Hello from CentOS" > /data/file_from_centos.txt
+[root@77ac92f71a6d /]# ls /data
+file_from_centos.txt
+[root@77ac92f71a6d /]# cat /data/file_from_centos.txt
+Hello from CentOS
+
+создадим файл на хосте:
+irina@ubuntuVB:~/docker-task4$ echo "Hello from Host" > file_from_host.txt
+irina@ubuntuVB:~/docker-task4$ ls
+file_from_centos.txt  file_from_host.txt
+irina@ubuntuVB:~/docker-task4$ cat file_from_host.txt
+Hello from Host
+
+проверим файлы: 
+irina@ubuntuVB:~/docker-task4$ docker exec -it debian-container bash
+root@33c77667f610:/# ls /data
+file_from_centos.txt  file_from_host.txt
+root@33c77667f610:/# cat /data/file_from_centos.txt
+Hello from CentOS
+root@33c77667f610:/# cat /data/file_from_host.txt
+Hello from Host
+
+## Задача 5
+
 
