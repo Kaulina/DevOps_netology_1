@@ -83,10 +83,9 @@ irina@ubuntuVB:~$ ss -tlpn | grep 127.0.0.1:8080
 
 ## Задача 4
 
-```dockerfile
 запустила контейнер с volume
-```
-![контейнер с volume](./4.4.2.ЗапускDebian-контейнера.png)
+
+![volume](./4.4.2.RunDebian.png)
 
 ```dockerfile
 контейнер centos запущен:
@@ -116,15 +115,15 @@ Hello from Host
 compose.yaml – для Portainer
 docker-compose.yaml – для локального registry
 
-![создала 2 файла](./5.5.1.создано2файла.png)
+![создала 2 файла](./5.5.1.Create2files.png)
 
 docker compose up -d - запустил контейнер Portainer
 
-![Portainer](./5.5.2.контейнерPortainer.png)
+![Portainer](./5.5.2.Portainer.png)
 
 проверила, что контейнер реально раотает и слушает порт.
 
-![реально работает и слушает порт](./5.5.3.контейнерРаботает.png)
+![реально работает и слушает порт](./5.5.3.work.png)
 
 Portainer установлен и доступен на http://127.0.0.1:9000
 Контейнер успешно работает после перезапуска.
