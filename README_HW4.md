@@ -1,7 +1,6 @@
 
 # Задача 1
 
-## Dockerfile
 ```dockerfile
 FROM nginx:1.29.0
 COPY index.html /usr/share/nginx/html/index.html
@@ -17,10 +16,9 @@ Hey, Netology
 </html>
 
 Сборка образа -docker build -t irina/custom-nginx:1.0.0 .
-Ретег образа, т.к. имеется разница в никнейме юзера - docker tag irina/custom-nginx:1.0.0 irinakau/custom-nginx:1.0.0
+Ретег образа, т.к. имеется разница в никнейме - docker tag irina/custom-nginx:1.0.0 irinakau/custom-nginx:1.0.0
 Публикация - docker push irinakau/custom-nginx:1.0.0
 Ссылка на DockerHub - https://hub.docker.com/repository/docker/irinakau/custom-nginx/general
-
 
 # Задача 2
 
@@ -50,6 +48,29 @@ Hey, Netology
 </body>
 </html>
 
+# Задача 3
 
+Контейнер остановился, потому что команда docker attach подключает нас к главному процессу контейнера с PID 1.
+В контейнере nginx запущен в режиме foreground -- это и есть основной процесс.
+Если нажать Ctrl+C, процесс получает сигнал SIGINT.
+Из-за этого основной процесс завершается, и контейнер останавливается вместе с ним.
 
+Когда в контейнере nginx я поменяла порт на 81, доступ к проброшенному на хост порт 8080 перестал работать. Это произошло потому, что проброс портов в Docker связан с портом внутри контейнера (ранее был 80), и после изменения настройки порты больше не совпадают.
+root@fae573bedd14:/# curl http://127.0.0.1:80
+curl: (7) Failed to connect to 127.0.0.1 port 80 after 2 ms: Couldn't connect to server
+root@fae573bedd14:/# curl http://127.0.0.1:81
+<html>
+<head>
+Hey, Netology
+</head>
+<body>
+<h1>I will be DevOps Engineer!</h1>
+</body>
+</html>
+
+команда - ss -tlpn | grep 127.0.0.1:8080
+показала:
+irina@ubuntuVB:~$ ss -tlpn | grep 127.0.0.1:8080
+
+Пустой вывод означает, что порт 8080 на хосте больше не принимает подключения, потому что nginx в контейнере изменил порт с 80 на 81. Это объясняет, почему запрос curl к http://127.0.0.1:8080 снаружи не срабатывает.
 
