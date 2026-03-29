@@ -1,5 +1,7 @@
 
-# Задача 1
+# Домашнее задание к занятию 4 «Оркестрация группой Docker контейнеров на примере Docker Compose»
+
+## Задача 1
 
 ```dockerfile
 FROM nginx:1.29.0
@@ -95,7 +97,7 @@ file_from_centos.txt  file_from_host.txt
 irina@ubuntuVB:~/docker-task4$ cat file_from_host.txt
 Hello from Host
 
-проверим файлы: 
+проверим файлы:
 irina@ubuntuVB:~/docker-task4$ docker exec -it debian-container bash
 root@33c77667f610:/# ls /data
 file_from_centos.txt  file_from_host.txt
@@ -105,5 +107,14 @@ root@33c77667f610:/# cat /data/file_from_host.txt
 Hello from Host
 
 ## Задача 5
+Я создала 2 файла compose.yaml и docker-compose.yaml
+compose.yaml – для Portainer
+docker-compose.yaml – для локального registry
+
+docker compose up -d - запустил контейнер Portainer
+
+проверила, что контейнер реально раотает и слушает порт.
 
 
+Portainer установлен и доступен на http://127.0.0.1:9000
+Контейнер успешно работает после перезапуска.
