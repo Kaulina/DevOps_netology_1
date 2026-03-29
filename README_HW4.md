@@ -84,6 +84,8 @@ CONTAINER ID   IMAGE      COMMAND               CREATED         STATUS         P
 77ac92f71a6d   centos:8   "tail -f /dev/null"   7 seconds ago   Up 5 seconds             centos-container
 
 Файл file_from_centos.txt создали в контейнере CentOS, и теперь его можно найти в смонтированном каталоге /data:
+![CentOs](screenshots/4.4.3. CentOs.png)
+
 [root@77ac92f71a6d /]# echo "Hello from CentOS" > /data/file_from_centos.txt
 [root@77ac92f71a6d /]# ls /data
 file_from_centos.txt
