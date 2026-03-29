@@ -3,29 +3,29 @@
 
 ## Задача 1
 
+```dockerfile
 FROM nginx:1.29.0
 COPY index.html /usr/share/nginx/html/index.html
 
 файл index.html содержит следующее:
-
 <html>
 <head>
 Hey, Netology
 </head>
 <body>
-```<h1>I will be DevOps Engineer!</h1>```
+<h1>I will be DevOps Engineer!</h1>
 </body>
 </html>
-
 
 Сборка образа -docker build -t irina/custom-nginx:1.0.0 .
 Ретег образа, т.к. имеется разница в никнейме - docker tag irina/custom-nginx:1.0.0 irinakau/custom-nginx:1.0.0
 Публикация - docker push irinakau/custom-nginx:1.0.0
 Ссылка на DockerHub - https://hub.docker.com/repository/docker/irinakau/custom-nginx/general
-
+```
 
 ## Задача 2
 
+```dockerfile
 irina@ubuntuVB:~$ date +"%d-%m-%Y %T.%N %Z" ; sleep 0.150 ; docker ps ; ss -tlpn | grep 127.0.0.1:8080 ; docker logs custom-nginx-t2 -n1 ; docker exec -it custom-nginx-t2 base64 /usr/share/nginx/html/index.html
 29-03-2026 13:21:07.208775748 +07
 CONTAINER ID   IMAGE                         COMMAND                  CREATED         STATUS         PORTS                    NAMES
@@ -51,9 +51,11 @@ Hey, Netology
 <h1>I will be DevOps Engineer!</h1>
 </body>
 </html>
+```
 
 ## Задача 3
 
+```dockerfile
 Контейнер остановился, потому что команда docker attach подключает нас к главному процессу контейнера с PID 1.
 В контейнере nginx запущен в режиме foreground -- это и есть основной процесс.
 Если нажать Ctrl+C, процесс получает сигнал SIGINT.
@@ -77,48 +79,52 @@ Hey, Netology
 irina@ubuntuVB:~$ ss -tlpn | grep 127.0.0.1:8080
 
 Пустой вывод означает, что порт 8080 на хосте больше не принимает подключения, потому что nginx в контейнере изменил порт с 80 на 81. Это объясняет, почему запрос curl к http://127.0.0.1:8080 снаружи не срабатывает.
+```
 
 ## Задача 4
 
+```dockerfile
+запустила контейнер с volume
+```
+![контейнер с volume](./4.4.2.ЗапускDebian-контейнера.png)
+
+```dockerfile
 контейнер centos запущен:
 irina@ubuntuVB:~/docker-task4$ docker ps
 CONTAINER ID   IMAGE      COMMAND               CREATED         STATUS         PORTS     NAMES
 77ac92f71a6d   centos:8   "tail -f /dev/null"   7 seconds ago   Up 5 seconds             centos-container
 
 Файл file_from_centos.txt создали в контейнере CentOS, и теперь его можно найти в смонтированном каталоге /data:
+```
 ![CentOs](./4.4.3.CentOs.png)
 
-[root@77ac92f71a6d /]# echo "Hello from CentOS" > /data/file_from_centos.txt
-[root@77ac92f71a6d /]# ls /data
-file_from_centos.txt
-[root@77ac92f71a6d /]# cat /data/file_from_centos.txt
-Hello from CentOS
-
+```dockerfile
 создадим файл на хосте:
 irina@ubuntuVB:~/docker-task4$ echo "Hello from Host" > file_from_host.txt
 irina@ubuntuVB:~/docker-task4$ ls
 file_from_centos.txt  file_from_host.txt
 irina@ubuntuVB:~/docker-task4$ cat file_from_host.txt
 Hello from Host
-
+```
 проверим файлы:
-irina@ubuntuVB:~/docker-task4$ docker exec -it debian-container bash
-root@33c77667f610:/# ls /data
-file_from_centos.txt  file_from_host.txt
-root@33c77667f610:/# cat /data/file_from_centos.txt
-Hello from CentOS
-root@33c77667f610:/# cat /data/file_from_host.txt
-Hello from Host
+
+![debian](./4.4.4.debian.png)
 
 ## Задача 5
+
 Я создала 2 файла compose.yaml и docker-compose.yaml
 compose.yaml – для Portainer
 docker-compose.yaml – для локального registry
 
+![создала 2 файла](./5.5.1.создано2файла.png)
+
 docker compose up -d - запустил контейнер Portainer
+
+![Portainer](./5.5.2.контейнерPortainer.png)
 
 проверила, что контейнер реально раотает и слушает порт.
 
+![реально работает и слушает порт](./5.5.3.контейнерРаботает.png)
 
 Portainer установлен и доступен на http://127.0.0.1:9000
 Контейнер успешно работает после перезапуска.
