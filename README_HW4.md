@@ -85,7 +85,7 @@ irina@ubuntuVB:~$ ss -tlpn | grep 127.0.0.1:8080
 
 запустила контейнер с volume
 
-![volume](./4.4.2.RunDebian.PNG)
+![volume](./4.4.2.RunDebian.png)
 
 ```dockerfile
 контейнер centos запущен:
