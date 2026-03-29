@@ -3,7 +3,6 @@
 
 ## Задача 1
 
-```dockerfile
 FROM nginx:1.29.0
 COPY index.html /usr/share/nginx/html/index.html
 
@@ -59,7 +58,7 @@ Hey, Netology
 
 Когда в контейнере nginx я поменяла порт на 81, доступ к проброшенному на хост порт 8080 перестал работать. Это произошло потому, что проброс портов в Docker связан с портом внутри контейнера (ранее был 80), и после изменения настройки порты больше не совпадают.
 root@fae573bedd14:/# curl http://127.0.0.1:80
-curl: (7) Failed to connect to 127.0.0.1 port 80 after 2 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 80 after 2 ms: Couldn't' connect to server
 root@fae573bedd14:/# curl http://127.0.0.1:81
 <html>
 <head>
@@ -84,7 +83,7 @@ CONTAINER ID   IMAGE      COMMAND               CREATED         STATUS         P
 77ac92f71a6d   centos:8   "tail -f /dev/null"   7 seconds ago   Up 5 seconds             centos-container
 
 Файл file_from_centos.txt создали в контейнере CentOS, и теперь его можно найти в смонтированном каталоге /data:
-![CentOs](screenshots/4.4.3. CentOs.png)
+![CentOs](./4.4.3.CentOs.png)
 
 [root@77ac92f71a6d /]# echo "Hello from CentOS" > /data/file_from_centos.txt
 [root@77ac92f71a6d /]# ls /data
