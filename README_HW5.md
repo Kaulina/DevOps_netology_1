@@ -36,6 +36,45 @@ Docker-образ собрался и запустился без проблем
 
 ![5.2.1](/5.2.1.yc.png)
 
+я выполнила авторизацию YC и выполнила настройки:
+
+```dockerfile
+irina@ubuntuVB:~$ yc init
+Welcome! This command will take you through the configuration process.
+Pick desired action:
+ [1] Re-initialize this profile 'default' with new settings 
+ [2] Create a new profile
+Please enter your numeric choice: 1
+Please go to https://oauth.yandex.ru/authorize?response_type=token&client_id=1a6990aa636648e9b2ef855fa7bec2fb in order to obtain OAuth token.
+ Please enter OAuth token: [y0__xDmrsjFAh***************************SfDWwgpcEDSgA] 
+You have one cloud available: 'cloud-kostochkina-a' (id = b1g94ecfq1al18t5jd43). It is going to be used by default.
+Please choose folder to use:
+ [1] default (id = b1grv7g6v3d86hdtr30s)
+ [2] Create a new folder
+Please enter your numeric choice: 1
+Your current folder has been set to 'default' (id = b1grv7g6v3d86hdtr30s).
+Do you want to configure a default Compute zone? [Y/n] y
+Which zone do you want to use as a profile default?
+ [1] ru-central1-a
+ [2] ru-central1-b
+ [3] ru-central1-d
+ [4] ru-central1-e
+ [5] ru-central1-k
+ [6] Don't set default zone
+Please enter your numeric choice: 1
+Your profile default Compute zone has been set to 'ru-central1-a'.
+
+```
+
+далее выполнила тегирование локального docker, загрузила его в облако и запустила
+![registry](5.2.2.registry.png)
+
+![digest](5.2.3.digest.png)
+
+ В ходе сканирования нашли уязвимости разного уровня — high, medium и low — что вполне ожидаемо для базовых образов.
+
+ ![ready](5.2.4.ready.png)
+
 ## Задание 3
 
 Создала файл compose.yaml, в котором описаны сервисы web и db, а также подключён proxy.yaml с помощью директивы include. Настроила пользовательскую bridge-сеть с фиксированными IP-адресами. Параметры конфигурации заданы через файл .env.
@@ -96,3 +135,106 @@ mysql> SELECT * from requests LIMIT 10;
 mysql> 
 
 ```
+
+## Задача 4
+
+мной была создана ВМ в YC, и поставила docker с помощью команды
+
+ssh ubuntu@178.154.221.131
+
+irina@ubuntuVB:~$ docker --version
+Docker version 28.2.2, build 28.2.2-0ubuntu1~24.04.1
+
+т.к. паект docker compose v2 отсутствовал, я установила его вручную.
+
+![,](5.4.1.instanceList.png)
+
+Запустила сервис, который включает FastAPI-приложение и базу данных MySQL.
+
+Проверила, что приложение доступно по внешнему IP и порту 8090. Запросы успешно проходят через контейнер и доходят до приложения.
+
+![4](5.4.2.deploy.PNG)
+
+![4](5.4.3.run.PNG)
+
+Также проверила доступность сервиса с внешней сети с помощью сервиса check-host.net.
+
+Отдельно проверила подключение к базе данных, выполнив SQL-запрос SELECT NOW().
+
+В процессе обнаружила и исправила ошибку подключения к базе — вместо имени контейнера в Docker-сети использовался адрес 127.0.0.1.
+
+Итоговое решение:
+
+![4](5.4.3.web.PNG)
+
+![4](5.4.3.web2.PNG)
+
+![4](5.4.4.dockerLogs.PNG)
+
+Все сервисы — nginx, haproxy, web и база данных — запустились. Приложение доступно по http через внешний ip и правильно обрабатывает запросы.
+
+## Задача 5
+
+Сначла создала папку backup
+
+![5/1](5.5.1.createBackup.PNG)
+
+бэкап создался
+
+![5.2](5.5.2.backup.PNG)
+
+cron
+
+![5.3](5.5.3.crontab.PNG)
+
+Настроила механизм резервного копирования базы данных MySQL с помощью контейнера schnitzler/mysqldump. Копии сохраняются в папку /opt/backup. Скрипт запускается автоматически каждую минуту через cron.
+
+```dockerfile
+* * * * * /opt/backup.sh
+```
+
+ Логины и пароли не прописаны в коде, а берутся из файла .env.
+
+![5.4](5.5.4.logs.PNG)
+
+## Задача 6
+
+Извлекла terraform из docker-образа
+
+![6.1](5.6.1.terraform.png)
+
+файл запущен локально
+
+Из-за того, что использовала OCI-формат образа, слои взялись из папки blobs, где лежал бинарник terraform, который удалось достать и запустить.
+
+![6.2](5.6.2.findTerraform.png)
+
+![6.3](5.6.3.finish.png)
+
+### Задача 6.1
+
+запустила контейнер через docker cp
+
+![6.1.1](5.6.1.1.finish.png)
+
+этот способ более простой, и не требует распаковки образа.
+
+### Задача 6.2
+
+извлекла terraform с помощью docker build
+в процессе скопировала его в корень контейнера, и извлекла docker cp
+
+![6.2.1](5.6.2.1.png)
+
+![6.2.2](5.6.2.2.png)
+
+запустила контейнер
+
+![6.2.3](5.6.2.3.png)
+
+все работает
+
+![6.2.4](5.6.2.4.png)
+
+## Задача 7
+
